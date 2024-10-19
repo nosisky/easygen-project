@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 const SignIn = () => {
   const history = useRouter();
@@ -49,7 +50,7 @@ const SignIn = () => {
             type="email"
             onChange={formik.handleChange}
             value={formik.values.email}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 text-black"
           />
           {formik.errors.email && (
             <div className="text-red-500 text-sm">{formik.errors.email}</div>
@@ -64,7 +65,7 @@ const SignIn = () => {
             type="password"
             onChange={formik.handleChange}
             value={formik.values.password}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 text-black"
           />
           {formik.errors.password && (
             <div className="text-red-500 text-sm">{formik.errors.password}</div>
@@ -79,9 +80,9 @@ const SignIn = () => {
         <div className="mt-4 text-center text-gray-700">
           <p className="text-sm">
             Don&apos;t have an account?{" "}
-            <a href="/signup" className="text-blue-500 hover:underline">
+            <Link href="/signup" className="text-blue-500 hover:underline">
               Sign up here
-            </a>
+            </Link>
           </p>
         </div>
       </form>
