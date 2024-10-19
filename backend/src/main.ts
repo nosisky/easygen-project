@@ -8,7 +8,7 @@ async function bootstrap() {
   app.use(helmet()); // Security middleware
   app.enableCors();
   const logger = new Logger('Bootstrap');
-  await app.listen(3000);
-  logger.log('Server running on http://localhost:3000');
+  await app.listen(3001);
+  logger.log('Server running on http://localhost:3001');
 }
 bootstrap();

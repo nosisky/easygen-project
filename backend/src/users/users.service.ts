@@ -16,4 +16,3 @@ export class UsersService {
     return this.userModel.findOne({ email }).exec();
   }
 }
-

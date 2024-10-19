@@ -5,6 +5,9 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  @Prop()
+  id: string;
+
   @Prop({ required: true })
   name: string;
 
@@ -16,4 +19,3 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
