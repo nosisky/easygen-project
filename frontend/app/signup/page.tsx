@@ -1,32 +1,39 @@
+"use client";
+
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import api from "../../helpers";
+import api from "../helpers";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 
-const SignIn = () => {
+function SignUp() {
   const history = useRouter();
 
-  const SignInSchema = Yup.object().shape({
+  const SignUpSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Minimum length of 8 characters")
+      .matches(/[a-zA-Z]/, "At least one letter")
+      .matches(/\d/, "At least one number")
+      .matches(/[^a-zA-Z0-9]/, "At least one special character"),
   });
 
   const formik = useFormik({
-    initialValues: { email: "", password: "" },
-    validationSchema: SignInSchema,
+    initialValues: { name: "", email: "", password: "" },
+    validationSchema: SignUpSchema,
     onSubmit: async (values) => {
       try {
-        const response = await api.post("/auth/signin", values);
-        Cookies.set("userToken", response.data.accessToken, { expires: 1 });
-        toast.success("Sign in successful!");
+        await api.post("/auth/signup", values);
+        toast.success("Sign up successful!");
         history.push("/dashboard");
-      } catch (error) {
-        console.error("Sign in error", error);
+      } catch (error: any) {
+        console.error("Sign up error", error);
+        toast.error(`Sign up failed: ${error.response.data.message}`);
       }
     },
   });
@@ -38,9 +45,24 @@ const SignIn = () => {
         onSubmit={formik.handleSubmit}
         className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
       >
-        <h2 className="text-2xl text-center font-bold mb-4 text-gray-600">
-          Sign In
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-600">
+          Sign Up
         </h2>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Name:
+          </label>
+          <input
+            name="name"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.name}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 text-black"
+          />
+          {formik.errors.name && (
+            <div className="text-red-500 text-sm">{formik.errors.name}</div>
+          )}
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Email:
@@ -73,21 +95,21 @@ const SignIn = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+          className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition duration-200"
         >
-          Sign In
+          Sign Up
         </button>
-        <div className="mt-4 text-center text-gray-700">
-          <p className="text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-blue-500 hover:underline">
-              Sign up here
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link href="/login" className="text-blue-500 hover:underline">
+              Log in
             </Link>
           </p>
         </div>
       </form>
     </>
   );
-};
+}
 
-export default SignIn;
+export default SignUp;
