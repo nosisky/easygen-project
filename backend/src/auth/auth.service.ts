@@ -105,8 +105,19 @@ export class AuthService {
   }
 
   async getUser(authorization: string): Promise<any> {
-    const token = authorization.split(' ')[1];
-    const decoded = this.jwtService.verify(token);
-    return this.usersService.findByEmail(decoded.email, true);
+    try {
+      const token = authorization?.split(' ')[1];
+      if (!token) {
+        throw new UnauthorizedException('Token is required');
+      }
+      const decoded = this.jwtService.verify(token);
+      return this.usersService.findByEmail(decoded.email, true);
+    } catch (error) {
+      this.logger.warn(`Invalid token attempted`, error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }

@@ -34,7 +34,11 @@ const SignIn = () => {
 
         history.push("/dashboard");
       } catch (error: any) {
-        toast.error(`Sign in failed!, ${error.response.data.message}`);
+        if (error.response.data.message) {
+          toast.error(`Sign in failed!, ${error.response.data.message}`);
+        } else {
+          toast.error(`Sign in failed!`);
+        }
       }
     },
   });
