@@ -22,7 +22,7 @@ function SignUp() {
       .matches(/\d/, "At least one number")
       .matches(/[^a-zA-Z0-9]/, "At least one special character"),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match!")
+      .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm Password is required"),
   });
 

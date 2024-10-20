@@ -13,19 +13,10 @@ const AuthNav = ({
 }) => {
   return (
     <div className="hidden md:flex items-center space-x-4">
-      <Link href="/" className="text-gray-300 hover:text-white">
-        Home
-      </Link>
-      <Link href="/about" className="text-gray-300 hover:text-white">
-        About
-      </Link>
-      <Link href="/services" className="text-gray-300 hover:text-white">
-        Services
-      </Link>
-      <Link href="/contact" className="text-gray-300 hover:text-white">
-        Contact
-      </Link>
-      <div className="relative group">
+      <div className="flex items-center space-x-2 relative group">
+        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+          <span className="text-gray-800 text-lg">{user.name.charAt(0)}</span>
+        </div>
         <button className="text-white focus:outline-none">{user.name}</button>
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
