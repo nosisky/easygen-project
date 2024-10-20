@@ -14,4 +14,3 @@ export class SignUpDto {
   @Matches(/[^a-zA-Z0-9]/, { message: 'At least one special character' })
   password: string;
 }
-
