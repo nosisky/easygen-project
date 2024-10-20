@@ -24,7 +24,7 @@ const SignIn = () => {
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: SignInSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting }) => {
       try {
         const response = await api.post("/auth/signin", values);
         toast.success("Sign in successful!");
@@ -34,11 +34,13 @@ const SignIn = () => {
 
         history.push("/dashboard");
       } catch (error: any) {
-        if (error.response.data.message) {
+        if (error.response && error.response.data.message) {
           toast.error(`Sign in failed!, ${error.response.data.message}`);
         } else {
           toast.error(`Sign in failed!`);
         }
+      } finally {
+        setSubmitting(false);
       }
     },
   });
@@ -91,9 +93,12 @@ const SignIn = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+          disabled={formik.isSubmitting}
+          className={`w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 ${
+            formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          Sign In
+          {formik.isSubmitting ? "Signing In..." : "Sign In"}
         </button>
         <div className="mt-4 text-center text-gray-700">
           <p className="text-sm">

@@ -29,7 +29,7 @@ function SignUp() {
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "", confirmPassword: "" },
     validationSchema: SignUpSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting }) => {
       try {
         await api.post("/auth/signup", values);
         toast.success("Sign up successful");
@@ -40,6 +40,8 @@ function SignUp() {
         } else {
           toast.error(`Sign up failed: An unexpected error occurred.`);
         }
+      } finally {
+        setSubmitting(false);
       }
     },
   });
@@ -117,9 +119,12 @@ function SignUp() {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition duration-200"
+          disabled={formik.isSubmitting}
+          className={`w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition duration-200 ${
+            formik.isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
-          Sign Up
+          {formik.isSubmitting ? "Submitting..." : "Sign Up"}
         </button>
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
