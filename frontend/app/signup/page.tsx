@@ -21,19 +21,26 @@ function SignUp() {
       .matches(/[a-zA-Z]/, "At least one letter")
       .matches(/\d/, "At least one number")
       .matches(/[^a-zA-Z0-9]/, "At least one special character"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Confirm Password is required"),
   });
 
   const formik = useFormik({
-    initialValues: { name: "", email: "", password: "" },
+    initialValues: { name: "", email: "", password: "", confirmPassword: "" },
     validationSchema: SignUpSchema,
     onSubmit: async (values) => {
       try {
         await api.post("/auth/signup", values);
-        toast.success("Sign up successful!");
-        history.push("/dashboard");
+        toast.success("Sign up successful");
+        history.push("/signin");
       } catch (error: any) {
         console.error("Sign up error", error);
-        toast.error(`Sign up failed: ${error.response.data.message}`);
+        if (error.response && error.response.status === 409) {
+          toast.error(`Sign up failed: ${error.response.data.message}`);
+        } else {
+          toast.error(`Sign up failed: An unexpected error occurred.`);
+        }
       }
     },
   });
@@ -91,6 +98,23 @@ function SignUp() {
           />
           {formik.errors.password && (
             <div className="text-red-500 text-sm">{formik.errors.password}</div>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">
+            Confirm Password:
+          </label>
+          <input
+            name="confirmPassword"
+            type="password"
+            onChange={formik.handleChange}
+            value={formik.values.confirmPassword}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 text-black"
+          />
+          {formik.errors.confirmPassword && (
+            <div className="text-red-500 text-sm">
+              {formik.errors.confirmPassword}
+            </div>
           )}
         </div>
         <button

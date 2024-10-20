@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../helpers";
@@ -9,9 +9,12 @@ import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import { AuthContext } from "../context/AuthContext";
 
 const SignIn = () => {
   const history = useRouter();
+  const [showPassword, setShowPassword] = React.useState(false);
+  const { setUser } = useContext(AuthContext);
 
   const SignInSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -24,10 +27,14 @@ const SignIn = () => {
     onSubmit: async (values) => {
       try {
         const response = await api.post("/auth/signin", values);
-        Cookies.set("userToken", response.data.accessToken, { expires: 1 });
         toast.success("Sign in successful!");
+
+        Cookies.set("userToken", response.data.accessToken, { expires: 1 });
+        setUser(response.data.user);
+
         history.push("/dashboard");
-      } catch (error) {
+      } catch (error: any) {
+        toast.error(`Sign in failed!, ${error.response.data.message}`);
         console.error("Sign in error", error);
       }
     },
@@ -58,17 +65,24 @@ const SignIn = () => {
             <div className="text-red-500 text-sm">{formik.errors.email}</div>
           )}
         </div>
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label className="block text-sm font-medium text-gray-700">
             Password:
           </label>
           <input
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             onChange={formik.handleChange}
             value={formik.values.password}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 text-black"
+            className="mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 text-black"
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute inset-y-0 right-0 flex items-center px-2 mt-7 text-gray-600"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
           {formik.errors.password && (
             <div className="text-red-500 text-sm">{formik.errors.password}</div>
           )}
