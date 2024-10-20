@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import api from "../helpers";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { AuthContext } from "../context/AuthContext";
@@ -42,7 +42,6 @@ const SignIn = () => {
 
   return (
     <>
-      <ToastContainer />
       <form
         onSubmit={formik.handleSubmit}
         className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"

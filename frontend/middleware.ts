@@ -16,14 +16,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (PUBLIC_ROUTES.includes(pathname)) {
+    return NextResponse.next();
+  }
+
   const userToken = request.cookies.get("userToken")?.value;
 
   if (!userToken) {
-    if (PUBLIC_ROUTES.includes(pathname)) {
-      return NextResponse.next();
-    } else {
-      return NextResponse.redirect(new URL("/signin", request.url));
-    }
+    return NextResponse.redirect(new URL("/signin", request.url));
   }
 
   const isValidToken = await validateToken(userToken);

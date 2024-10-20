@@ -31,6 +31,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           const response = await api.get("/auth/user", {
             headers: { Authorization: `Bearer ${userToken}` },
           });
+
+          console.log(api.get, "API GET =====>", process.env.API_URL);
           setUser(response.data);
         } catch (error) {
           console.error("Error fetching user data", error);

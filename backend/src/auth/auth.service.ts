@@ -97,6 +97,9 @@ export class AuthService {
       return { success: true, userId: user._id };
     } catch (error) {
       this.logger.warn(`Invalid token attempted`, error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new UnauthorizedException('Invalid token');
     }
   }

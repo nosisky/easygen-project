@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import api from "../helpers";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function SignUp() {
@@ -47,7 +47,6 @@ function SignUp() {
 
   return (
     <>
-      <ToastContainer />
       <form
         onSubmit={formik.handleSubmit}
         className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
