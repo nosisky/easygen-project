@@ -35,7 +35,6 @@ function SignUp() {
         toast.success("Sign up successful");
         history.push("/signin");
       } catch (error: any) {
-        console.error("Sign up error", error);
         if (error.response && error.response.status === 409) {
           toast.error(`Sign up failed: ${error.response.data.message}`);
         } else {

@@ -32,10 +32,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             headers: { Authorization: `Bearer ${userToken}` },
           });
 
-          console.log(api.get, "API GET =====>", process.env.API_URL);
           setUser(response.data);
         } catch (error) {
-          console.error("Error fetching user data", error);
           Cookies.remove("userToken");
           setUser(null);
         }
