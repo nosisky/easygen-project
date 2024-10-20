@@ -79,7 +79,7 @@ const SignIn = () => {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 flex items-center px-2 mt-7 text-gray-600"
+            className="absolute inset-y-0 right-0 flex items-center px-2 mt-7 text-gray-400"
           >
             {showPassword ? "Hide" : "Show"}
           </button>
